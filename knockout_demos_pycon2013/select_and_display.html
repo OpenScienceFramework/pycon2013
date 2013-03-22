@@ -1,0 +1,64 @@
+<!-- This file tests: declaring observable variables and integrating them with html, computed functions
+and the if control structure. --!>
+
+<html>
+<head><title>This... is... OPENSCIENCEDOME.</title></head>
+<script type='text/javascript' src='knockout-2.2.1.js'>
+</script>
+<body>
+
+<table width='100%'>
+    <thead>
+        <tr>
+            <th width='50%'>Ice Cream Flavor</th>
+            <th width='50%'>Topping</th>
+        </tr>
+    </thead>
+    <tbody>
+	<tr>
+		<!-- Use "data-bind" to tell knockout what objects to watch.  The variables below (single
+		variables chosenFlavor and chosenTopping and arrays flavorItems and toppingItems are defined
+		in the script below. --!>
+	    <td>
+                <select data-bind="options: flavorItems, optionsCaption: 'select', value: chosenFlavor"> </select>
+            </td>
+	    <td>
+                <select data-bind="options: toppingItems, optionsCaption: 'select', value: chosenTopping"> </select>
+            </td>	
+	</tr>
+    </tbody>
+</table>
+
+<!-- The if control only displays the object if the conditions are met.  Note that in the h2 object the variable
+is called directly, because you're only checking if it exists, whereas in the h3 object you have to treat it 
+as a function() to get the value. --!>
+
+<h2 data-bind="if: chosenFlavor && chosenTopping">
+You have ordered <b data-bind="text: orderItems"></b>!
+</h2>
+<h3 data-bind="if: (chosenTopping()=='poker chips' && chosenFlavor)">(Ewwwwwww.)</h3>
+
+<script>
+
+var icecreamModel = function() {
+
+    // Declare variables and give some initial values.
+    this.flavorItems = ko.observableArray(["chocolate","mint","strawberry"]);
+    this.toppingItems = ko.observableArray(["chocolate chips","potato chips","poker chips"]);	
+    this.chosenFlavor = ko.observable()
+    this.chosenTopping = ko.observable()
+
+    // Computed functions are updated whenever a variable they call is changed.
+    this.orderItems = ko.computed(function() {
+        return this.chosenFlavor() + " with " + this.chosenTopping();
+    }, this);
+
+};
+ 
+ko.applyBindings(new icecreamModel());
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!-- This covers: populating dropdowns with user-defined variables and using dropdown selections to control
+behavior. --!>
+
+<html>
+<head><title>Tutorial Test</title></head>
+<script type='text/javascript' src='knockout-2.2.1.js'>
+</script>
+<body>
+
+<table width='100%'>
+	<tr>
+        	<!-- The left side of the table displays dropdowns.  Note that the first dropdown is always
+		visible while the second is inside a div that only appears when chosenValue() and dropValue() match. --!>       
+	
+		<td width='50%' bgcolor="gray">
+			  <select data-bind="options: selections, optionsCaption: 'Choose...', value: dropValue"></select>
+                          <div data-bind="visible: inputValue() == dropValue()">
+				<select data-bind="options: newSelections, optionsCaption: 'Choose...'"></select>
+			  </div>
+                </td>
+             
+		<!-- The user can populate both dropdowns, but the second only becomes visible when the value
+		of the second input box matches the dropdown selection. --!>
+		
+		<td width='50%' bgcolor="white">
+			To enter new options in the drop-down to your left, enter them below:<br />
+		        <textarea data-bind="value: populateFirstDrop" rows="10" cols="40"></textarea><br />
+			Optionally, you can choose one of the options you gave above to automatically pop up 
+			a new dropdown menu to the left and text box below.<br />
+			<textarea data-bind="value: inputValue" rows="1" cols = "40"></textarea><br />
+				<div data-bind="visible: inputValue() == dropValue()">
+				Enter another list of options for the second drop down menu:<br />
+				<textarea data-bind="value: populateSecondDrop" rows="10" cols="40"></textarea><br />
+				</div>    
+		</td>
+	</tr>
+</table>
+
+<script>
+
+function viewModel() {
+
+	// Initialize variables.
+	this.populateFirstDrop = ko.observable("dog,cat,penguin");
+	this.inputValue = ko.observable("cat");
+	this.dropValue = ko.observable();
+	this.populateSecondDrop = ko.observable("");
+
+	// Computed function takes the string input into text areas, splits it into an array, and assigns to
+	// the variable called by the dropdown data-bind.
+
+	this.selections = ko.computed(function() {
+		return this.populateFirstDrop().split(",");
+	});
+
+	this.newSelections = ko.computed(function() {
+		return this.populateSecondDrop().split(",");
+	});
+}
+
+ko.applyBindings(viewModel());
+
+
+</script>
+
+</body>
+</html>
